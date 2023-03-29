@@ -25,6 +25,8 @@ class Staff:
     def help_text(self) -> None:
         print("Press 1 to create flight.")
         print("Press 2 to list flights.")
+        print("Press 3 to update a flight record.")
+        print("Press 4 to delete a flight record.")
         print("Press q to exit.")
     
     def main(self) -> None:
@@ -33,6 +35,10 @@ class Staff:
             self.create_flight()
         elif command == '2':
             self.list_flight()
+        elif command == '3':
+            self.update_flight()
+        elif command == '4':
+            self.delete_flight()
         elif command == 'q':
             self.stop()
         else:
@@ -60,10 +66,16 @@ class Staff:
         flight.create(flight_number, airline_name)
         
     def update_flight(self) -> None:
+        old_flight_number = input('Enter a Flight number to update :')
         flight_number = input('Enter Flight Number :')
         airline_name = input('Enter Airline Name :')
         flight = Flight()
-        flight.update(flight_number, airline_name)
+        flight.update(old_flight_number, flight_number, airline_name)
+        
+    def delete_flight(self) -> None:
+        old_flight_number = input('Enter a Flight number to delete :')
+        flight = Flight()
+        flight.delete(old_flight_number)
 
 class UI:
     def __init__(self, user_type: str) -> None:

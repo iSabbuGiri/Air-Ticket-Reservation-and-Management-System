@@ -21,7 +21,6 @@ class Flight:
             
     def create(self, flight_number, airline_name):
         with open('store/flights.dat', 'rb') as f:
-            # Check if file is empty.
             try:
                 data = pickle.load(f)
             except EOFError:
@@ -37,21 +36,38 @@ class Flight:
         with open('store/flights.dat', 'wb') as f:
             pickle.dump(data, f)
             
-    def update(self, flight_number, airline_name):
+    def update(self, old_flight_number, flight_number, airline_name):
         with open('store/flights.dat', 'rb') as f:
-            # Check if file is empty.
             try:
                 data = pickle.load(f)
             except EOFError:
                 data = []
                 
-        data.append(
-            {
-                'Flight Number': flight_number,
-                'Airline Name': airline_name
-            }
-        )
+        for item in data:
+            if old_flight_number in item['Flight Number']: 
+                item['Flight Number'] = flight_number
+                item['Airline Name'] = airline_name
+            else:    
+                print('Flight does not exist.')
 
         with open('store/flights.dat', 'wb') as f:
             pickle.dump(data, f)
+            
+    def delete(self, old_flight_number):
+        with open('store/flights.dat', 'rb') as f:
+            try:
+                data = pickle.load(f)
+            except EOFError:
+                data = []
+                
+        for item in data:
+            if old_flight_number in item['Flight Number']: 
+                del item
+            else:
+                print('Flight does not exist.')
+
+        with open('store/flights.dat', 'wb') as f:
+            pickle.dump(data, f)
+            
+    
         
