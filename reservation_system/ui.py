@@ -23,11 +23,11 @@ class Staff:
         self.run = True
     
     def help_text(self) -> None:
-        print("Press 1 to create flight.")
+        print("\nPress 1 to create flight.")
         print("Press 2 to list flights.")
         print("Press 3 to update a flight record.")
         print("Press 4 to delete a flight record.")
-        print("Press q to exit.")
+        print("Press q to exit.\n")
     
     def main(self) -> None:
         command = input('Command: ')
@@ -52,7 +52,7 @@ class Staff:
         self.main()
         
     def stop(self) -> None:
-        print('Program terminated.')
+        print('\nProgram terminated.')
         self.run = False
         
     def list_flight(self) -> None:
@@ -60,17 +60,25 @@ class Staff:
         flight.list()
         
     def create_flight(self) -> None:
-        flight_number = input('Enter Flight Number :')
-        airline_name = input('Enter Airline Name :')
+        flight_number = input('Enter flight : ')
+        airline_name = input('Enter airline name : ')
+        origin = input('Enter Origin location : ')
+        destination = input('Enter destination : ')
+        departure_time = input('Enter departure time (MM-DD-YYYY) : ')
+        arrival_time = input('Enter arrival time (MM-DD-YYYY) : ')
         flight = Flight()
-        flight.create(flight_number, airline_name)
+        flight.create(flight_number, airline_name, origin, destination, departure_time, arrival_time)
         
     def update_flight(self) -> None:
         old_flight_number = input('Enter a Flight number to update :')
-        flight_number = input('Enter Flight Number :')
-        airline_name = input('Enter Airline Name :')
+        flight_number = input('Enter Flight Number : ')
+        airline_name = input('Enter Airline Name : ')
+        origin = input('Enter Origin location : ')
+        destination = input('Enter destination : ')
+        departure_time = input('Enter departure time (MM-DD-YYYY) : ')
+        arrival_time = input('Enter arrival time (MM-DD-YYYY) : ')
         flight = Flight()
-        flight.update(old_flight_number, flight_number, airline_name)
+        flight.update(old_flight_number, flight_number, airline_name, origin, destination, departure_time, arrival_time)
         
     def delete_flight(self) -> None:
         old_flight_number = input('Enter a Flight number to delete :')
