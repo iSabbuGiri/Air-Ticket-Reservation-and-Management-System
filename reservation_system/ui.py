@@ -101,3 +101,8 @@ class UI:
     
     def exit(self):
         pass
+
+
+    # name and DOB
+    # reservation ko lagi client ko information aaunu paryo
+    # flight ma kun kun seat khali xa hernuparyo
