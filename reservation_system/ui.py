@@ -1,4 +1,5 @@
 from flight import Flight
+from reservation import Reservation
 
 class Client:
     def __init__(self) -> None:
@@ -27,6 +28,10 @@ class Staff:
         print("Press 2 to list flights.")
         print("Press 3 to update a flight record.")
         print("Press 4 to delete a flight record.")
+        print("Press 5 to create reservation.")
+        print("Press 6 to list reservation.")
+        print("Press 7 to update a reservation record.")
+        print("Press 8 to delete a reservation record.")
         print("Press q to exit.\n")
     
     def main(self) -> None:
@@ -39,6 +44,14 @@ class Staff:
             self.update_flight()
         elif command == '4':
             self.delete_flight()
+        elif command == '5':
+            self.create_reservation()
+        elif command == '6':
+            self.list_reservation()
+        elif command == '7':
+            self.update_reservation()
+        elif command == '8':
+            self.delete_reservation()    
         elif command == 'q':
             self.stop()
         else:
@@ -57,8 +70,8 @@ class Staff:
         
     def list_flight(self) -> None:
         flight = Flight()
-        flight.list()
-        
+        flight.list()   
+          
     def create_flight(self) -> None:
         flight_number = input('Enter flight : ')
         airline_name = input('Enter airline name : ')
@@ -85,6 +98,33 @@ class Staff:
         flight = Flight()
         flight.delete(old_flight_number)
 
+
+    def list_reservations(self) -> None:
+        reservation = Reservation()
+        reservation.list()
+        
+    def create_reservation(self) -> None:
+        flight_number = input('Enter flight number : ')
+        customer_name = input('Enter customer name : ')
+        seat_number = input('Enter seat number : ')
+        reservation = Reservation()
+        reservation.create(flight_number, customer_name, seat_number)
+        
+    def update_reservation(self) -> None:
+        old_reservation = input('Enter a reservation to update (in the format "flight_number-customer_name-seat_number") :')
+        flight_number = input('Enter flight number : ')
+        customer_name = input('Enter customer name : ')
+        seat_number = input('Enter seat number : ')
+        reservation = Reservation()
+        reservation.update(old_reservation, flight_number, customer_name, seat_number)
+        
+    def delete_reservation(self) -> None:
+        old_reservation = input('Enter a reservation to delete (in the format "flight_number-customer_name-seat_number") :')
+        reservation = Reservation()
+        reservation.delete(old_reservation) 
+
+
+
 class UI:
     def __init__(self, user_type: str) -> None:
         self.user_type = user_type
@@ -103,6 +143,4 @@ class UI:
         pass
 
 
-    # name and DOB
-    # reservation ko lagi client ko information aaunu paryo
-    # flight ma kun kun seat khali xa hernuparyo
+   
