@@ -123,8 +123,6 @@ class Staff:
         reservation = Reservation()
         reservation.delete(old_reservation) 
 
-
-
 class UI:
     def __init__(self, user_type: str) -> None:
         self.user_type = user_type

@@ -1,24 +1,14 @@
 import pandas as pd
 import pickle
 
-
-class Reservation:
-    def __init__(self, flight, customer, seat):
-        self.flight = flight
-        self.customer = customer
-        self.seat = seat
-
-    
-    def get_reservation_info(self):
-        return f"{self.customer.name} has reserved {self.seat.seat_number} on {self.flight.airline_name} {self.flight.flight_number} from {self.flight.origin} to {self.flight.destination}"    
-    
-    def list(self):
+class Reservation:   
+    def list(self) -> None:
         with open('store/reservations.dat', 'rb') as f:
             data = pickle.load(f)
             df = pd.DataFrame(data)
             print(df)
             
-    def create(self, flight, customer, seat):
+    def create(self, flight: str, customer: str, seat: str) -> None:
         with open('store/reservations.dat', 'rb') as f:
             try:
                 data = pickle.load(f)
@@ -36,7 +26,7 @@ class Reservation:
         with open('store/reservations.dat', 'wb') as f:
             pickle.dump(data, f)
             
-    def update(self, old_reservation, flight, customer, seat):
+    def update(self, old_reservation: str, flight: str, customer: str, seat: str):
         with open('store/reservations.dat', 'rb') as f:
             try:
                 data = pickle.load(f)
@@ -48,14 +38,13 @@ class Reservation:
                 item['Flight'] = flight
                 item['Customer'] = customer
                 item['Seat'] = seat
-
             else:    
                 print('Reservation does not exist.')
 
         with open('store/reservations.dat', 'wb') as f:
             pickle.dump(data, f)
             
-    def delete(self, old_reservation):
+    def delete(self, old_reservation: str) -> None:
         with open('store/reservations.dat', 'rb') as f:
             try:
                 data = pickle.load(f)
@@ -70,6 +59,3 @@ class Reservation:
 
         with open('store/reservations.dat', 'wb') as f:
             pickle.dump(data, f)
-            
-    
-        
