@@ -1,5 +1,6 @@
 import pandas as pd
 import pickle
+from typing import Type
 
 class Flight:
     def validate_flight(self, flight_number: str) -> bool:
@@ -17,14 +18,31 @@ class Flight:
                     if flight_number in item['Flight Number']:
                         return False
             return True
-    
-    def list(self):
+        
+    def search(self, origin: str, destination: str) -> None:
+        """Method to search flights on the basis of source and destination."""
+        found = []
         with open('store/flights.dat', 'rb') as f:
             data = pickle.load(f)
-            df = pd.DataFrame(data)
-            print('\n')
+            
+        for item in data:
+            if (item['Origin'] == origin) and (item['Destination'] == destination):
+                found.append(item)
+                
+        if found == []:
+            print('No results.')
+        else:
+            df = pd.DataFrame(found)
             print(df)
-            print('\n')
+    
+    def list(self) -> None:
+        with open('store/flights.dat', 'rb') as f:
+            data = pickle.load(f)
+        df = pd.DataFrame(data)
+        print('\n{}\n'.format(df))
+    
+    def detail(self, flight_number) -> None:
+        pass
             
     def create(self, flight_number: str, airline_name: str, origin: str, destination: str, departure_time: str, arrival_time: str) -> None:
         if self.validate_flight(flight_number):

@@ -1,4 +1,5 @@
 from flight import Flight
+from seat import Seat
 from reservation import Reservation
 
 class Client:
@@ -22,44 +23,7 @@ class Client:
 class Staff:
     def __init__(self) -> None:
         self.run = True
-    
-    def help_text(self) -> None:
-        print("\nPress 1 to create flight.")
-        print("Press 2 to list flights.")
-        print("Press 3 to update a flight record.")
-        print("Press 4 to delete a flight record.")
-        print("Press 5 to create reservation.")
-        print("Press 6 to list reservation.")
-        print("Press 7 to update a reservation record.")
-        print("Press 8 to delete a reservation record.")
-        print("Press q to exit.\n")
-    
-    def main(self) -> None:
-        command = input('Command: ')
-        if command == '1':
-            self.create_flight()
-        elif command == '2':
-            self.list_flight()
-        elif command == '3':
-            self.update_flight()
-        elif command == '4':
-            self.delete_flight()
-        elif command == '5':
-            self.create_reservation()
-        elif command == '6':
-            self.list_reservation()
-        elif command == '7':
-            self.update_reservation()
-        elif command == '8':
-            self.delete_reservation()    
-        elif command == 'q':
-            self.stop()
-        else:
-            print('Invalid option. Please try again.')
-            
-        if self.run:
-            self.start()
-    
+        
     def start(self) -> None:
         self.help_text()
         self.main()
@@ -67,10 +31,63 @@ class Staff:
     def stop(self) -> None:
         print('\nProgram terminated.')
         self.run = False
+    
+    def help_text(self) -> None:
+        print('\n')
+        print('Enter 1 for Flights.')
+        print('Enter 2 for Seats.')
+        print('Enter 3 for Customers.')
+        print('Enter 4 for Reservation.')
+    
+    def main(self) -> None:
+        command = input('Command: ')
+        
+        if command == '1':
+            self.flight_main()   
+        elif command == '2':
+            self.seat_main()
+        elif command == 'q':
+            self.stop()
+        else:
+            print('Invalid option. Please try again.')
+            
+        if self.run:
+            self.start()
+        
+    def flight_main(self) -> None:
+        print('Enter 1 to list flights.')
+        print('Enter 2 to create a flight.')
+        print('Enter 3 to update a flight.')
+        print('Enter 4 to delete a flight.')
+        print('Enter 5 to search a flight.')
+        print('Enter 6 to view flight details.')
+        print('Enter q to exit.')
+        
+        command = input('Command : ')
+        if command == '1':
+            self.list_flight()
+        elif command == '2':
+            self.create_flight()
+        elif command == '3':
+            self.update_flight()
+        elif command == '4':
+            self.delete_flight()
+        elif command == '5':
+            self.search_flight()
+        elif command == '6':
+            self.flight_detail()
+        elif command == 'q':
+            self.start()
+            
+        self.flight_main()
         
     def list_flight(self) -> None:
         flight = Flight()
         flight.list()   
+        
+    def flight_detail(self) -> None:
+        flight = Flight()
+        flight.detail()   
           
     def create_flight(self) -> None:
         flight_number = input('Enter flight : ')
@@ -97,7 +114,36 @@ class Staff:
         old_flight_number = input('Enter a Flight number to delete :')
         flight = Flight()
         flight.delete(old_flight_number)
-
+        
+    def search_flight(self) -> None:
+        origin = input('Enter origin : ')
+        destination = input('Enter destination : ')
+        flight = Flight()
+        flight.search(origin, destination)
+        
+    def seat_main(self) -> None:
+        print('Enter 1 to list seats.')
+        print('Enter 2 to create a seat.')
+        print('Enter q to exit.')
+        
+        command = input('Command : ')
+        if command == '1':
+            self.create_seat()
+        elif command == 'q':
+            self.start()
+            
+        self.seat_main()
+        
+    def list_seats(self) -> None:
+        seat = Seat()
+        seat.list()   
+          
+    def create_seat(self) -> None:
+        flight_number = input('Enter flight : ')
+        seat = input('Enter seat : ')
+        seat_type = input('Enter seat type : ')
+        seat = Seat()
+        seat.create(flight_number, seat, seat_type)
 
     def list_reservations(self) -> None:
         reservation = Reservation()
