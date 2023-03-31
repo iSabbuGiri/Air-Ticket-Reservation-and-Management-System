@@ -80,7 +80,7 @@ class Staff:
         elif command == '6':
             self.flight_detail()
         elif command == 'q':
-            self.start()
+            self.stop()
             
         self.flight_main()
         
