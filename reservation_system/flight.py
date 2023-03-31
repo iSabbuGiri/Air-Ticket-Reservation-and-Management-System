@@ -140,6 +140,3 @@ class Flight:
 
         with open('store/flights.dat', 'wb') as f:
             pickle.dump(data, f)
-            
-    
-        
