@@ -48,6 +48,10 @@ class Staff:
             self.flight_main()   
         elif command == '2':
             self.seat_main()
+        elif command == '3':
+            self.customer_main()
+        elif command == '4':
+            self.reservation_main()        
         elif command == 'q':
             self.stop()
         else:
@@ -124,40 +128,48 @@ class Staff:
         destination = input('Enter destination : ')
         flight = Flight()
         flight.search(origin, destination)
-        
-    def seat_main(self) -> None:
-        print('Enter 1 to create a seat.')
+
+    def reservation_main(self) -> None:
+        print('\n')
+        print('Enter 1 to list reservation.')
+        print('Enter 2 to create a reservation.')
+        print('Enter 3 to update a reservation.')
+        print('Enter 4 to delete a reservation.')
+        print('Enter 5 to search a reservation.')
+        print('Enter 6 to view reservation details.')
         print('Enter q to exit.')
         
-        command = input('Command : ')
+        command = input('\nCommand : ')
         if command == '1':
-            self.create_seat()
+            self.list_reservation()
+        elif command == '2':
+            self.create_reservation()
+        elif command == '3':
+            self.update_reservation()
+        elif command == '4':
+            self.delete_reservation()
+        elif command == '5':
+            self.search_reservation()
+        elif command == '6':
+            self.reservation_detail()
         elif command == 'q':
-            self.start()
+            self.stop()
             
-        self.seat_main()
-        
-    def list_seats(self) -> None:
-        seat = Seat()
-        seat.list()   
-          
-    def create_seat(self) -> None:
-        flight_number = input('Enter flight : ')
-        seat_name = input('Enter seat : ')
-        seat_type = input('Enter seat type : ')
-        seat = Seat()
-        seat.create(flight_number, seat_name, seat_type)
+        self.reservation_main()
 
-    def list_reservations(self) -> None:
+    
+    def list_reservation(self) -> None:
         reservation = Reservation()
         reservation.list()
         
     def create_reservation(self) -> None:
+        reservation_id = input('Enter reservation ID: ')
         flight_number = input('Enter flight number : ')
         customer_name = input('Enter customer name : ')
         seat_number = input('Enter seat number : ')
+        arrival_date = input('Enter arrival date (MM-DD-YYYY) : ')
         reservation = Reservation()
-        reservation.create(flight_number, customer_name, seat_number)
+        reservation.create(reservation_id, flight_number, customer_name, seat_number, arrival_date)
         
     def update_reservation(self) -> None:
         old_reservation = input('Enter a reservation to update (in the format "flight_number-customer_name-seat_number") :')
@@ -171,6 +183,36 @@ class Staff:
         old_reservation = input('Enter a reservation to delete (in the format "flight_number-customer_name-seat_number") :')
         reservation = Reservation()
         reservation.delete(old_reservation) 
+    
+    def search_reservation(self) -> None:
+        customer_name = input('Enter customer name : ')
+        arrival_date = input('Enter arrival date : ')
+        reservation = Reservation()
+        reservation.search(customer_name, arrival_date)
+            
+        
+    def seat_main(self) -> None:
+        print('Enter 1 to create a seat.')
+        print('Enter q to exit.')
+        
+        command = input('Command : ')
+        if command == '1':
+            self.create_seat()
+        elif command == 'q':
+            self.stop()
+            
+        self.seat_main()
+        
+    def list_seats(self) -> None:
+        seat = Seat()
+        seat.list()   
+          
+    def create_seat(self) -> None:
+        flight_number = input('Enter flight : ')
+        seat_name = input('Enter seat : ')
+        seat_type = input('Enter seat type : ')
+        seat = Seat()
+        seat.create(flight_number, seat_name, seat_type)
 
 class UI:
     def __init__(self, user_type: str) -> None:

@@ -1,6 +1,5 @@
 import pandas as pd
 import pickle
-from typing import Type
 
 class Flight:
     def validate_flight(self, flight_number: str) -> bool:
@@ -18,7 +17,7 @@ class Flight:
                     if flight_number in item['Flight Number']:
                         return False
             return True
-        
+
     def search(self, origin: str, destination: str) -> None:
         """Method to search flights on the basis of source and destination."""
         found = []
@@ -33,50 +32,16 @@ class Flight:
             print('No results.')
         else:
             df = pd.DataFrame(found)
-            print(df)
+            print(df)    
     
-    def list(self) -> None:
+    def list(self):
         with open('store/flights.dat', 'rb') as f:
             data = pickle.load(f)
-        df = pd.DataFrame(data)
-        print('\n{}\n'.format(df))
-    
-    def detail(self, flight_number: str) -> None:
-        flight = None
-        seats = None
-        with open('store/flights.dat', 'rb') as f:
-            try:
-                data = pickle.load(f)
-            except EOFError:
-                print('File does not exist')
-            else:
-                for item in data:
-                    if flight_number in item['Flight Number']:
-                        flight = item
-                        break
-                
-                if flight:
-                    with open('store/seats.dat', 'rb') as f:                        
-                        try:
-                            data = pickle.load(f)
-                        except EOFError:
-                            print('File does not exist')
-                        else:
-                            if flight_number in data:
-                                seats = data[flight_number]['Seats']
-                                
-        if flight:
+            df = pd.DataFrame(data)
             print('\n')
-            for key, value in flight.items():
-                print('{} : {}'.format(key, value))
-                
-        if seats:
-            print('\nSeats: \n')
-            for seat in seats:
-                for key, value in seat.items():
-                    print('{} : {}'.format(key, value))
-                print('\n')
-                                                               
+            print(df)
+            print('\n')
+            
     def create(self, flight_number: str, airline_name: str, origin: str, destination: str, departure_time: str, arrival_time: str) -> None:
         if self.validate_flight(flight_number):
             with open('store/flights.dat', 'rb') as f:
@@ -140,3 +105,6 @@ class Flight:
 
         with open('store/flights.dat', 'wb') as f:
             pickle.dump(data, f)
+            
+    
+        
