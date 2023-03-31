@@ -40,11 +40,16 @@ class Customer:
     
     def create(self, first_name: str, last_name: str, dob: str, phone_number: str, email: str) -> None:
         """Method to create customer data."""
-        data, _ = self.get_data()
-        _, exists = self.retrieve(first_name, last_name, dob, data)
-        if exists:
-            print('Customer already exists.')
+        go = True
+        data, is_empty = self.get_data()
+        if not is_empty:
+            _, exists = self.retrieve(first_name, last_name, dob, data)
+            if exists:
+                go = False
         else:
+            data = {}
+                
+        if go:
             payload = {
                     self.get_id(first_name, last_name, dob): {
                     'First Name': first_name,
@@ -65,20 +70,28 @@ class Customer:
         self.delete(id)
         self.create(first_name, last_name, dob, phone_number, email)
             
-    def search(self, first_name: str, last_name: str, dob: str) -> dict:
+    def search(self, id: str) -> dict:
         """Method to search and return customer data."""
-        data, _ = self.get_data()
-        res, exists = self.retrieve(first_name, last_name, dob, data)
-        if exists:
-            print('\n')
-            for key, value in res.items():
-                print('{} : {}'.format(key, value))
+        data, is_empty = self.get_data()
+        if not is_empty:
+            if id in data:
+                res = data[id]
+                print('\n')
+                for key, value in res.items():
+                    print('{} : {}'.format(key, value))
+            else:
+                print('\nCustomer with the given id does not exist.')
+        else:
+            print('No data.')
     
     def delete(self, id: str) -> None:
         """Delete customer data from id."""
-        data, _ = self.get_data()
-        if id in data:
-            del data[id]
-            
-            with open(self.filename, 'wb') as f:
-                pickle.dump(data, f)
+        data, is_empty = self.get_data()
+        if not is_empty:
+            if id in data:
+                del data[id]
+                
+                with open(self.filename, 'wb') as f:
+                    pickle.dump(data, f)
+        else:
+            print('No data.')

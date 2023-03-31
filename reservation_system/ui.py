@@ -1,6 +1,7 @@
 from flight import Flight
 from seat import Seat
 from reservation import Reservation
+from customer import Customer
 
 class Client:
     def __init__(self) -> None:
@@ -38,7 +39,7 @@ class Staff:
         print('Enter 2 for Seats.')
         print('Enter 3 for Customers.')
         print('Enter 4 for Reservations.')
-        print('Enter q to quit the program.')
+        print('Enter q to quit.')
     
     def main(self) -> None:
         print('\n')
@@ -68,7 +69,7 @@ class Staff:
         print('Enter 4 to delete a flight.')
         print('Enter 5 to search a flight.')
         print('Enter 6 to view flight details.')
-        print('Enter q to exit.')
+        print('Enter q to go back.')
         
         command = input('\nCommand : ')
         if command == '1':
@@ -84,9 +85,10 @@ class Staff:
         elif command == '6':
             self.flight_detail()
         elif command == 'q':
-            self.stop()
+            self.start()
             
-        self.flight_main()
+        if self.run:
+            self.flight_main()
         
     def list_flight(self) -> None:
         flight = Flight()
@@ -137,7 +139,7 @@ class Staff:
         print('Enter 4 to delete a reservation.')
         print('Enter 5 to search a reservation.')
         print('Enter 6 to view reservation details.')
-        print('Enter q to exit.')
+        print('Enter q to go back.')
         
         command = input('\nCommand : ')
         if command == '1':
@@ -153,42 +155,105 @@ class Staff:
         elif command == '6':
             self.reservation_detail()
         elif command == 'q':
-            self.stop()
+            self.start()
             
-        self.reservation_main()
-
+        if self.run:
+            self.reservation_main()
     
     def list_reservation(self) -> None:
         reservation = Reservation()
         reservation.list()
         
     def create_reservation(self) -> None:
-        reservation_id = input('Enter reservation ID: ')
         flight_number = input('Enter flight number : ')
-        customer_name = input('Enter customer name : ')
+        customer_id = input('Enter customer ID : ')
         seat_number = input('Enter seat number : ')
         arrival_date = input('Enter arrival date (MM-DD-YYYY) : ')
         reservation = Reservation()
-        reservation.create(reservation_id, flight_number, customer_name, seat_number, arrival_date)
+        reservation.create(flight_number, customer_id, seat_number, arrival_date)
         
     def update_reservation(self) -> None:
-        old_reservation = input('Enter a reservation to update (in the format "flight_number-customer_name-seat_number") :')
+        id = input('Enter reservation ID')
         flight_number = input('Enter flight number : ')
-        customer_name = input('Enter customer name : ')
+        customer_id = input('Enter customer ID : ')
         seat_number = input('Enter seat number : ')
+        arrival_date = input('Enter arrival date (MM-DD-YYYY) : ')
         reservation = Reservation()
-        reservation.update(old_reservation, flight_number, customer_name, seat_number)
+        reservation.update(id, flight_number, customer_id, seat_number, arrival_date)
         
     def delete_reservation(self) -> None:
-        old_reservation = input('Enter a reservation to delete (in the format "flight_number-customer_name-seat_number") :')
+        id = input('Enter reservation ID :')
         reservation = Reservation()
-        reservation.delete(old_reservation) 
+        reservation.delete(id) 
     
     def search_reservation(self) -> None:
         customer_name = input('Enter customer name : ')
-        arrival_date = input('Enter arrival date : ')
         reservation = Reservation()
-        reservation.search(customer_name, arrival_date)
+        reservation.search(customer_name)
+        
+    def reservation_detail(self) -> None:
+        id = input('Enter reservation ID : ')
+        reservation = Reservation()
+        reservation.search(id)
+
+    def customer_main(self) -> None:
+        print('\n')
+        print('Enter 1 to list customers.')
+        print('Enter 2 to create a customer.')
+        print('Enter 3 to update a customer.')
+        print('Enter 4 to delete a customer.')
+        print('Enter 5 to search a customer.')
+        print('Enter q to go back.')
+        
+        command = input('\nCommand : ')
+        if command == '1':
+            self.list_customer()
+        elif command == '2':
+            self.create_customer()
+        elif command == '3':
+            self.update_customer()
+        elif command == '4':
+            self.delete_customer()
+        elif command == '5':
+            self.search_customer()
+        elif command == 'q':
+            self.start()
+            
+        if self.run:
+            self.customer_main()
+
+    def list_customer(self) -> None:
+        customer = Customer()
+        customer.list()
+        
+    def create_customer(self) -> None:
+        first_name = input("Enter First Name : ")
+        last_name = input("Enter Last Name : ")
+        dob = input("Enter Date of Birth (MM-DD-YYYY) : ")
+        phone_number = input("Enter Phone Number : ")
+        email = input("Enter Email : ")
+        customer = Customer()
+        customer.create(first_name, last_name, dob, phone_number, email)
+        
+    def update_customer(self) -> None:
+        id = input('Enter customer id : ')
+        first_name = input("Enter First Name : ")
+        last_name = input("Enter Last Name : ")
+        dob = input("Enter Date of Birth (MM-DD-YYYY) : ")
+        phone_number = input("Enter Phone Number : ")
+        email = input("Enter Email : ")
+        customer = Customer()
+        customer.update(id, first_name, last_name, dob, phone_number, email)
+        
+    def delete_customer(self) -> None:
+        id = input('Enter customer ID : ')
+        customer = Customer()
+        customer.delete(id)
+    
+    def search_customer(self) -> None:
+        id = input('Enter customer ID : ')
+        customer = Customer()
+        customer.search(id)
             
         
     def seat_main(self) -> None:
@@ -201,7 +266,8 @@ class Staff:
         elif command == 'q':
             self.stop()
             
-        self.seat_main()
+        if self.run:
+            self.start()
         
     def list_seats(self) -> None:
         seat = Seat()
