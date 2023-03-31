@@ -1,42 +1,44 @@
-import pandas as pd
 import pickle
 
 class Seat:
-    # def list(self) -> None:
-    #     with open('store/seats.dat', 'rb') as f:
-    #         try:
-    #             data = pickle.load(f)
-    #         except EOFError:
-    #             data = {}
-                
-    #     df = pd.DataFrame(data)
-        
-    #     if data == {}:
-    #         print('No data available.')
-    #     else:
-    #         print('\n{}\n'.format(df))
-    
-    def create(self, flight_number: str, seat: str, seat_type: str) -> None:
-        with open('store/seats.dat', 'rb') as f:
+    def flight_exists(self, flight_number: str) -> bool:
+        with open('store/flights.dat', 'rb') as f:
             try:
                 data = pickle.load(f)
             except EOFError:
-                 data = {}    
-                 
-        if flight_number in data:
-            data[flight_number]['Seats'].append({
-                seat: 0,
-                'Seat Type': seat_type
-            })
+                return False
+            else:
+                for item in data:
+                    if flight_number in item['Flight Number']:
+                        return True
+            return False
+        
+    def create(self, flight_number: str, seat: str, seat_type: str) -> None:
+        if self.flight_exists(flight_number):
+            with open('store/seats.dat', 'rb') as f:
+                try:
+                    data = pickle.load(f)
+                except EOFError:
+                    data = {}    
+                    
+            if flight_number in data:
+                data[flight_number]['Seats'].append({
+                    'Name': seat,
+                    'Reserved': 0,
+                    'Type': seat_type
+                })
+            else:
+                data.update({
+                    flight_number: {
+                        'Seats': [{
+                            'Name': seat,
+                            'Reserved': 0, 
+                            'Type': seat_type
+                        }]
+                    }
+                })
+                
+            with open('store/seats.dat', 'wb') as f:
+                data = pickle.dump(data, f)
         else:
-            data.update({
-                flight_number: {
-                    'Seats': [{
-                        seat: 0,
-                        'Seat Type': seat_type
-                    }]
-                }
-            })
-            
-        with open('store/seats.dat', 'wb') as f:
-            data = pickle.dump(data, f)
+            print('Flight does not exist.')

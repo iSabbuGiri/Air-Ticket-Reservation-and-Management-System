@@ -41,9 +41,42 @@ class Flight:
         df = pd.DataFrame(data)
         print('\n{}\n'.format(df))
     
-    def detail(self, flight_number) -> None:
-        pass
-            
+    def detail(self, flight_number: str) -> None:
+        flight = None
+        seats = None
+        with open('store/flights.dat', 'rb') as f:
+            try:
+                data = pickle.load(f)
+            except EOFError:
+                print('File does not exist')
+            else:
+                for item in data:
+                    if flight_number in item['Flight Number']:
+                        flight = item
+                        break
+                
+                if flight:
+                    with open('store/seats.dat', 'rb') as f:                        
+                        try:
+                            data = pickle.load(f)
+                        except EOFError:
+                            print('File does not exist')
+                        else:
+                            if flight_number in data:
+                                seats = data[flight_number]['Seats']
+                                
+        if flight:
+            print('\n')
+            for key, value in flight.items():
+                print('{} : {}'.format(key, value))
+                
+        if seats:
+            print('\nSeats: \n')
+            for seat in seats:
+                for key, value in seat.items():
+                    print('{} : {}'.format(key, value))
+                print('\n')
+                                                               
     def create(self, flight_number: str, airline_name: str, origin: str, destination: str, departure_time: str, arrival_time: str) -> None:
         if self.validate_flight(flight_number):
             with open('store/flights.dat', 'rb') as f:

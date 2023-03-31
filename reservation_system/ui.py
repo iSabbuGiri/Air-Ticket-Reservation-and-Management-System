@@ -33,13 +33,15 @@ class Staff:
         self.run = False
     
     def help_text(self) -> None:
-        print('\n')
+        print('\n\t\t Welcome to the Flight Reservation System.\n')
         print('Enter 1 for Flights.')
         print('Enter 2 for Seats.')
         print('Enter 3 for Customers.')
-        print('Enter 4 for Reservation.')
+        print('Enter 4 for Reservations.')
+        print('Enter q to quit the program.')
     
     def main(self) -> None:
+        print('\n')
         command = input('Command: ')
         
         if command == '1':
@@ -55,6 +57,7 @@ class Staff:
             self.start()
         
     def flight_main(self) -> None:
+        print('\n')
         print('Enter 1 to list flights.')
         print('Enter 2 to create a flight.')
         print('Enter 3 to update a flight.')
@@ -63,7 +66,7 @@ class Staff:
         print('Enter 6 to view flight details.')
         print('Enter q to exit.')
         
-        command = input('Command : ')
+        command = input('\nCommand : ')
         if command == '1':
             self.list_flight()
         elif command == '2':
@@ -86,8 +89,9 @@ class Staff:
         flight.list()   
         
     def flight_detail(self) -> None:
+        flight_number = input('Enter flight number : ')
         flight = Flight()
-        flight.detail()   
+        flight.detail(flight_number)   
           
     def create_flight(self) -> None:
         flight_number = input('Enter flight : ')
@@ -122,8 +126,7 @@ class Staff:
         flight.search(origin, destination)
         
     def seat_main(self) -> None:
-        print('Enter 1 to list seats.')
-        print('Enter 2 to create a seat.')
+        print('Enter 1 to create a seat.')
         print('Enter q to exit.')
         
         command = input('Command : ')
@@ -140,10 +143,10 @@ class Staff:
           
     def create_seat(self) -> None:
         flight_number = input('Enter flight : ')
-        seat = input('Enter seat : ')
+        seat_name = input('Enter seat : ')
         seat_type = input('Enter seat type : ')
         seat = Seat()
-        seat.create(flight_number, seat, seat_type)
+        seat.create(flight_number, seat_name, seat_type)
 
     def list_reservations(self) -> None:
         reservation = Reservation()
