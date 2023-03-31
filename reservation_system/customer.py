@@ -1,84 +1,84 @@
 import pickle
+import pandas as pd
 
 class Customer:
-    def validate_customer(self, customer_id: str, data: dict) -> bool:
-        """
-        Method to check if duplicate customer exists during creation and update.
-        Returns boolean value.
-        """
-        with open('customers.dat', 'rb') as f:
-            try:
-                data = pickle.load(f)
-            except EOFError:
-                return True
-            else:
-                for item in data:
-                    if customer_id in item['Customer ID']:
-                        return False
-            return True
+    def __init__(self) -> None:
+        """Default constructor"""
+        self.filename = 'store/customers.dat'
     
-    def list(self):
-        with open('customers.dat', 'rb') as f:
-            data = pickle.load(f)
-            for item in data.values():
-                print(item)
-            
-    def create(self, customer_id: str, name: str, email: str, phone_number: str) -> None:
-        with open('customers.dat', 'rb') as f:
+    def get_data(self) -> tuple[any, bool]:
+        """Method to get data from a file and unpickle it."""
+        is_empty = False
+        data = None
+        with open(self.filename, 'rb') as f:
             try:
                 data = pickle.load(f)
             except EOFError:
-                data = {}
-
-        if self.validate_customer(customer_id, data):
-            customer_data = {
-                'Customer ID': customer_id,
-                'Name': name,
-                'Email': email,
-                'Phone Number': phone_number
-            }
-            
-            data[customer_id] = customer_data
-            
-            with open('customers.dat', 'wb') as f:
-                pickle.dump(data, f)
-        else:
-            print('Customer ID must be unique.')
-            
-    def update(self, old_customer_id: str, customer_id: str, name: str, email: str, phone_number: str) -> None:
-        with open('customers.dat', 'rb') as f:
-            try:
-                data = pickle.load(f)
-            except EOFError:
-                data = {}
-                    
-        if old_customer_id in data and self.validate_customer(customer_id, data):
-            customer_data = {
-                'Customer ID': customer_id,
-                'Name': name,
-                'Email': email,
-                'Phone Number': phone_number
-            }
-            
-            data[customer_id] = customer_data
-            del data[old_customer_id]
-            
-            with open('customers.dat', 'wb') as f:
-                pickle.dump(data, f)
-        else:
-            print('Customer does not exist or new Customer ID is not unique.')
-            
-    def delete(self, customer_id: str) -> None:
-        with open('customers.dat', 'rb') as f:
-            try:
-                data = pickle.load(f)
-            except EOFError:
-                data = {}
+                is_empty = True
                 
-        if customer_id in data:
-            del data[customer_id]
-            
-            with open('customers.dat', 'wb') as f:
-                pickle.dump(data, f)
+        return data, is_empty
+                
+    def get_id(self, first_name: str, last_name: str, dob: str) -> str:
+        """Method to create a username from user information."""
+        return '{}_{}_{}'.format(first_name, last_name, dob.replace('-', '_'))
+    
+    def retrieve(self, first_name: str, last_name: str, dob: str, data: dict) -> tuple[dict, bool]:
+        """Method to check if customer exists."""
+        id = self.get_id(first_name, last_name, dob)
+        if id in data:
+            return data[id], True 
+        return {}, False
+    
+    def list(self) -> None:
+        """Method to list all customers in table like format in the command line interface."""
+        data, is_empty = self.get_data()
+        if is_empty:
+            print('No customer data.')
         else:
-            print('Customer does not exist.')
+            df = pd.DataFrame(data)
+            print(df)
+    
+    def create(self, first_name: str, last_name: str, dob: str, phone_number: str, email: str) -> None:
+        """Method to create customer data."""
+        data, _ = self.get_data()
+        _, exists = self.retrieve(first_name, last_name, dob, data)
+        if exists:
+            print('Customer already exists.')
+        else:
+            payload = {
+                    self.get_id(first_name, last_name, dob): {
+                    'First Name': first_name,
+                    'Last Name': last_name,
+                    'Date of Birth': dob,
+                    'Phone Number': phone_number,
+                    'Email': email
+                }   
+            }
+            
+            data.update(payload)
+            
+            with open (self.filename, 'wb') as f:
+                pickle.dump(data, f)
+            
+    def update(self, id: str, first_name: str, last_name: str, dob: str, phone_number: str, email: str) -> None:
+        """Method to update customer data."""
+        self.delete(id)
+        self.create(first_name, last_name, dob, phone_number, email)
+            
+    def search(self, first_name: str, last_name: str, dob: str) -> dict:
+        """Method to search and return customer data."""
+        data, _ = self.get_data()
+        res, exists = self.retrieve(first_name, last_name, dob, data)
+        if exists:
+            print('\n')
+            for key, value in res.items():
+                print('{} : {}'.format(key, value))
+    
+    def delete(self, id: str) -> None:
+        """Delete customer data from id."""
+        data, _ = self.get_data()
+        if id in data:
+            del data[id]
+            
+            with open(self.filename, 'wb') as f:
+                pickle.dump(data, f)
