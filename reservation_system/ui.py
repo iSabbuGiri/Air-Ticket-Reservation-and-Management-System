@@ -5,10 +5,7 @@ from customer import Customer
 
 class Client:
     def __init__(self) -> None:
-        pass
-
-    def seat_option(self, flight: str):
-        pass
+        self.run = True
                
     def start(self) -> None:
         self.help_text()
@@ -28,9 +25,6 @@ class Client:
             self.flight_detail()
         elif command == 'q':
             self.start()
-            
-        # if self.run:
-        #     self.flight_main()
 
     def search_flight(self) -> None:
         origin = input('Enter origin : ')
@@ -42,10 +36,6 @@ class Client:
         flight_number = input('Enter flight number : ')
         flight = Flight()
         flight.detail(flight_number)         
-
-
-    def exit(self) -> None:
-        pass
 
 class Staff:
     def __init__(self) -> None:
@@ -220,7 +210,7 @@ class Staff:
     def reservation_detail(self) -> None:
         id = input('Enter reservation ID : ')
         reservation = Reservation()
-        reservation.search(id)
+        reservation.detail(id)
 
     def customer_main(self) -> None:
         print('\n')
@@ -319,9 +309,3 @@ class UI:
             staff.start()
         else:
             raise Exception("User type does not exist.")
-    
-    def exit(self):
-        pass
-
-
-   

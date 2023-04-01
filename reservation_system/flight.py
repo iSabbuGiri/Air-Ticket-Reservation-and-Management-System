@@ -101,6 +101,15 @@ class Flight:
                 found = True
                 df = pd.DataFrame([item])
                 print(df)
+                
+                print('\n Seats:\n')
+                with open('store/seats.dat', 'rb') as f:
+                    data = pickle.load(f)
+                    if flight_number in data:
+                        for seat in data[flight_number]['Seats']:
+                            print('\n')
+                            for key, value in seat.items():
+                                print('{} : {}'.format(key, value))
                 break
         
         if not found:

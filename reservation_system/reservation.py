@@ -10,10 +10,13 @@ class Reservation:
             except EOFError:
                 print('No data available.')
             else:
-                df = pd.DataFrame(data)
-                print('\n')
-                print(df)
-                print('\n')
+                if len(data) == 0:
+                    print('No data available.')
+                else:
+                    df = pd.DataFrame(data)
+                    print('\n')
+                    print(df)
+                    print('\n')
             
     def detail(self, id: str) -> None:
         """Method to search reservation on the basis of reservation id"""
@@ -52,7 +55,7 @@ class Reservation:
                 data = {}
                 
         data.update({
-            uuid.uuid4(): {
+            str(uuid.uuid4()): {
                 'Flight Number': flight_number,
                 'Customer': customer,
                 'Seat Number': seat_number,
