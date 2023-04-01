@@ -88,7 +88,23 @@ class Flight:
             with open('store/flights.dat', 'wb') as f:
                 pickle.dump(data, f)
         else:
-            print('Flight number must be unique.')     
+            print('Flight number must be unique.')  
+
+    def detail(self, flight_number: str) -> None:
+        """Method to retrieve flight details by flight number."""
+        with open('store/flights.dat', 'rb') as f:
+            data = pickle.load(f)
+        
+        found = False
+        for item in data:
+            if item['Flight Number'] == flight_number:
+                found = True
+                df = pd.DataFrame([item])
+                print(df)
+                break
+        
+        if not found:
+            print('Flight not found.')           
                    
     def delete(self, old_flight_number: str) -> None:
         with open('store/flights.dat', 'rb') as f:

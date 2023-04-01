@@ -6,18 +6,44 @@ from customer import Customer
 class Client:
     def __init__(self) -> None:
         pass
-    
-    def main(self):
-        print('Enter flight number to check seat availability.')
-        flight = Flight()
-        flight.list()
-    
+
     def seat_option(self, flight: str):
         pass
-    
+               
     def start(self) -> None:
-        self.main()
-    
+        self.help_text()
+        self.flight_main() 
+
+    def help_text(self) -> None:
+        print('\n\t\t Welcome to the Flight Reservation System.\n')
+        print('Enter 1 for search flights.')
+        print('Enter 2 for flight details.')  
+        print('Enter q to go back.') 
+
+    def flight_main(self) -> None:
+        command = input('Command : ')   
+        if command == '1':
+            self.search_flight()
+        elif command == '2':
+            self.flight_detail()
+        elif command == 'q':
+            self.start()
+            
+        # if self.run:
+        #     self.flight_main()
+
+    def search_flight(self) -> None:
+        origin = input('Enter origin : ')
+        destination = input('Enter destination : ')
+        flight = Flight()
+        flight.search(origin, destination)   
+
+    def flight_detail(self) -> None:
+        flight_number = input('Enter flight number : ')
+        flight = Flight()
+        flight.detail(flight_number)         
+
+
     def exit(self) -> None:
         pass
 

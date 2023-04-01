@@ -42,3 +42,6 @@ class Seat:
                 data = pickle.dump(data, f)
         else:
             print('Flight does not exist.')
+
+
+          
